@@ -80,7 +80,7 @@ const Navber = () => {
             <span className="badge">{name}</span>
           </a>
         </li>
-        <li><a>Settings</a></li>
+        <li><a>Dashboard</a></li>
         <li><a onClick={handleLogOut}>Logout</a></li>
       </ul>
           </div>
