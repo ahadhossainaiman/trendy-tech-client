@@ -16,7 +16,7 @@ const Navber = () => {
  
   // console.log("aiman",user);
   return (
-    <div className="navbar h-10">
+    <div className="navbar h-10 sticky top-0 z-10 bg-blue-300">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -80,7 +80,9 @@ const Navber = () => {
             <span className="badge">{name}</span>
           </a>
         </li>
-        <li><a>Dashboard</a></li>
+        <li>
+        <Link href='/dashboard'>Dashboard</Link>
+        </li>
         <li><a onClick={handleLogOut}>Logout</a></li>
       </ul>
           </div>
