@@ -31,7 +31,7 @@ const ProductCart = ({ product }) => {
   const [createReviews,{data:res,errorMsg}] = useCreateReviewsMutation();
   const {data:reviews,isLoading,error} = useGetReviewsQuery();
 
-  console.log(reviews);
+  // console.log(reviews);
  
   const {name,email,photo_url} = useSelector((state)=>state.userSlice);
   
@@ -39,7 +39,7 @@ const ProductCart = ({ product }) => {
   
     const review = {...data,email,name,photo_url,product_id:updateId};
     createReviews(review);
-    console.log(res);
+    // console.log(res);
     if(res){
       toast.success(`Thankyou ${name} For You Valuable Review !`, {
         position: toast.POSITION.TOP_CENTER
@@ -67,7 +67,7 @@ const ProductCart = ({ product }) => {
   const filterReview = reviews?.filter((review)=>{
     return review.product_id == updateId;
   })
-  console.log(filterReview);
+  // console.log(filterReview);
   return (
     <div className="mx-10 my-10 ">
       <div className="bg-slate-100 p-5 rounded-lg">
