@@ -11,8 +11,8 @@ import { toast } from "react-toastify";
 import { useState } from "react";
 
 const ProductCart = ({ product }) => {
-    
-  const { register, handleSubmit,reset } = useForm();
+    console.log(product);
+
   const {
     _id,
     creationDate,
@@ -26,20 +26,19 @@ const ProductCart = ({ product }) => {
     product_owner,
     tags,
   } = product;
-  const [updateId,setUpdateId] = useState();
+  const { register, handleSubmit,reset } = useForm({
+    ['id'+_id]: _id
+  });
   const router = useRouter();
   const [createReviews,{data:res,errorMsg}] = useCreateReviewsMutation();
   const {data:reviews,isLoading,error} = useGetReviewsQuery();
 
-  // console.log(reviews);
  
   const {name,email,photo_url} = useSelector((state)=>state.userSlice);
   
   const onSubmit = (data)=>{
-  
-    const review = {...data,email,name,photo_url,product_id:updateId};
+    const review = {...data,email,name,photo_url,product_id:_id};
     createReviews(review);
-    // console.log(res);
     if(res){
       toast.success(`Thankyou ${name} For You Valuable Review !`, {
         position: toast.POSITION.TOP_CENTER
@@ -52,22 +51,19 @@ const ProductCart = ({ product }) => {
     }
     
   }
-
-  const handleModalOpen = (id)=>{
-    setUpdateId(id)
-    console.log(id);
+  const handleModalOpen = (id)=>{  
     if(name){
-      document.getElementById("my_modal_3").showModal()
+      document.getElementById("my_modal_"+_id).showModal()
     }else{
       console.log('aiman');
       router.push('/login')
     }
   }
-
+console.log(reviews);
   const filterReview = reviews?.filter((review)=>{
-    return review.product_id == updateId;
+    return review.product_id == _id;
   })
-  // console.log(filterReview);
+
   return (
     <div className="mx-10 my-10 ">
       <div className="bg-slate-100 p-5 rounded-lg">
@@ -143,18 +139,19 @@ const ProductCart = ({ product }) => {
        
 
 
-        <Modal id='my_modal_3'>
-          <div className="flex gap-3 items-center">
-          <img className="w-10 h-10 rounded-full border-2 border-green-400" src={photo_url} alt="" />
-            <h3 className="font-bold text-lg">Please Provide Your Valuable Review!</h3>
-          </div>
-            
-            <form  onSubmit={handleSubmit(onSubmit)}>
-                <textarea rows='2' className="border-2 border-gray-200 w-full h-10 mt-3 p-2 text-[15px]" placeholder="Review..." type="text"  {...register("review", { required: true })} />
-                <input className="bg-green-400 border-2 w-full border-red-400 cursor-pointer hover:border-black py-2 px-14 my-5 rounded-lg text-white font-bold" type="submit" value='Submit' />
-            </form>
-        </Modal>
-        
+  <Modal id={"my_modal_"+_id}>
+    <div className="flex gap-3 items-center">
+    <img className="w-10 h-10 rounded-full border-2 border-green-400" src={photo_url} alt="" />
+      <h3 className="font-bold text-lg">Please Provide Your Valuable Review!</h3>
+    </div>
+      
+      <form  onSubmit={handleSubmit(onSubmit)}>
+          <textarea rows='2' className="border-2 border-gray-200 w-full h-10 mt-3 p-2 text-[15px]" placeholder="Review..." type="text"  {...register("review", { required: true })} />
+          <input className="bg-green-400 border-2 w-full border-red-400 cursor-pointer hover:border-black py-2 px-14 my-5 rounded-lg text-white font-bold" type="submit" value='Submit' />
+      </form>
+  </Modal>
+  
+
       </div>
     </div>
   );
