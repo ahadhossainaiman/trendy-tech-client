@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Modal = ({children,id}) => {
-    console.log(id);
+    // console.log(id);
     return (
         <div>
         <dialog id={id} className="modal">
