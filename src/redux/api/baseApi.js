@@ -27,11 +27,26 @@ const baseApi = createApi({
                 method:'POST',
                 body:{email,name,photo_url,product_id,review}
             })
+        }),
+        createLikes:builder.mutation({
+            query:({product_id,photo_url,email, owner_img, product_name,product_owner})=>({
+                url:`/likes`,
+                method:'POST',
+                body:{product_id,photo_url,email, owner_img, product_name,product_owner}
+            })
+        }),
+        createDisLike:builder.mutation({
+            query:({email,product_id})=>({
+                url:`/dislikes`,
+                method:'DELETE',
+                body:{email,product_id}
+            })
         })
+
     })
     
 })
 
-export const {useCreateUserMutation,useGetProductQuery,useCreateReviewsMutation,useGetReviewsQuery} = baseApi;
+export const {useCreateUserMutation,useGetProductQuery,useCreateReviewsMutation,useGetReviewsQuery,useCreateLikesMutation,useCreateDisLikeMutation} = baseApi;
 
 export default baseApi;

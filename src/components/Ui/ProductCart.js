@@ -6,13 +6,18 @@ import Modal from "./Modal";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { useCreateReviewsMutation, useGetProductQuery, useGetReviewsQuery } from "@/redux/api/baseApi";
+import {
+  useCreateDisLikeMutation,
+  useCreateLikesMutation,
+  useCreateReviewsMutation,
+  useGetProductQuery,
+  useGetReviewsQuery,
+} from "@/redux/api/baseApi";
 import { toast } from "react-toastify";
+import { AiOutlineLike } from "react-icons/ai";
 import { useState } from "react";
 
 const ProductCart = ({ product }) => {
-    console.log(product);
-
   const {
     _id,
     creationDate,
@@ -26,38 +31,61 @@ const ProductCart = ({ product }) => {
     product_owner,
     tags,
   } = product;
-  const { register, handleSubmit,reset } = useForm({
-    ['id'+_id]: _id
-  });
+  const { register, handleSubmit, reset } = useForm();
   const router = useRouter();
-  const [createReviews,{data:res,errorMsg}] = useCreateReviewsMutation();
-  const {data:reviews,isLoading,error} = useGetReviewsQuery();
+  const [toggleLike, setToggleLike] = useState(false);
+  const [createReviews, { data: res, errorMsg }] = useCreateReviewsMutation();
+  const { data: reviews, isLoading, error } = useGetReviewsQuery();
+  const [createLikes, { data: likeRes }] = useCreateLikesMutation();
+  const [createDisLike,{data:disLikeRes}] = useCreateDisLikeMutation();
 
- 
-  const {name,email,photo_url} = useSelector((state)=>state.userSlice);
-  
-  const onSubmit = (data)=>{
-    const review = {...data,email,name,photo_url,product_id:_id};
+  const { name, email, photo_url } = useSelector((state) => state.userSlice);
+
+  const onSubmit = (data) => {
+    const review = { ...data, email, name, photo_url, product_id: _id };
     createReviews(review);
-      toast.success(`Thankyou ${name} For You Valuable Review !`, {
-        position: toast.POSITION.TOP_CENTER
-      })
-      reset()
-    
-    
-  }
-  const handleModalOpen = (id)=>{  
-    if(name){
-      document.getElementById("my_modal_"+_id).showModal()
-    }else{
-      console.log('aiman');
-      router.push('/login')
+    toast.success(`Thankyou ${name} For You Valuable Review !`, {
+      position: toast.POSITION.TOP_CENTER,
+    });
+    reset();
+  };
+  const handleModalOpen = (id) => {
+    if (name) {
+      document.getElementById("my_modal_" + _id).showModal();
+    } else {
+      console.log("aiman");
+      router.push("/login");
     }
+  };
+  const handleLike = (email) => {
+    setToggleLike(!toggleLike)
+    console.log({
+      product_id: _id,
+      photo_url,
+      email,
+      owner_img,
+      product_name,
+      product_owner,
+    });
+    createLikes({
+      product_id: _id,
+      photo_url,
+      email,
+      owner_img,
+      product_name,
+      product_owner,
+    });
+    console.log(likeRes);
+  };
+  const handleDisLike = () =>{
+    setToggleLike(!toggleLike)
+    createDisLike({email,product_id:_id})
+
   }
-console.log(reviews);
-  const filterReview = reviews?.filter((review)=>{
+  console.log(reviews);
+  const filterReview = reviews?.filter((review) => {
     return review.product_id == _id;
-  })
+  });
 
   return (
     <div className="mx-10 my-10 ">
@@ -98,16 +126,35 @@ console.log(reviews);
             <AiFillLike /> <span> 10</span>
           </div>
           <div>
-            <p>{filterReview.length} review</p>
+            <p>{filterReview?.length} review</p>
           </div>
         </div>
         <div className="grid grid-cols-3 border-y-2 p-2 items-center">
-          <div className="flex justify-center items-center gap-2">
-            <AiFillLike />
-            <p>Link</p>
-          </div>
-          
-          <div  onClick={()=>handleModalOpen(_id)} className="flex cursor-pointer justify-center items-center gap-2">
+          {toggleLike ? (
+            <div
+            onClick={handleDisLike}
+              className="flex justify-center items-center gap-2"
+            >
+              <AiFillLike />
+
+              <p>Like</p>
+            </div>
+          ) : (
+            <div
+            
+              onClick={() => handleLike(email)}
+              className="flex justify-center items-center gap-2"
+            >
+              <AiOutlineLike />
+
+              <p>Like</p>
+            </div>
+          )}
+
+          <div
+            onClick={() => handleModalOpen(_id)}
+            className="flex cursor-pointer justify-center items-center gap-2"
+          >
             <FaRegComment /> <p>Review</p>
           </div>
           <div className="flex  justify-center items-center gap-2">
@@ -115,40 +162,57 @@ console.log(reviews);
             <p>Report</p>
           </div>
         </div>
-        {
-         filterReview?.map((review)=><div key={review._id} className="">
-          <div className="my-3">
-            <div className="flex gap-1 items-center">
-            <img className="w-8 h-8 rounded-full border-2 border-blue-500" src={review.photo_url} alt="" />
-            <p className="text-[15px] text-blue-500 font-bold">{review.name}</p>
-            <span className="text-[12px]">{review.creationTime}</span>
-            </div>
-           
-            <div className="ml-8 mt-3">
-              <span className="bg-white py-2 px-3 rounded-xl">{review.review}</span>
+        {filterReview?.map((review) => (
+          <div key={review._id} className="">
+            <div className="my-3">
+              <div className="flex gap-1 items-center">
+                <img
+                  className="w-8 h-8 rounded-full border-2 border-blue-500"
+                  src={review.photo_url}
+                  alt=""
+                />
+                <p className="text-[15px] text-blue-500 font-bold">
+                  {review.name}
+                </p>
+                <span className="text-[12px]">{review.creationTime}</span>
+              </div>
+
+              <div className="ml-8 mt-3">
+                <span className="bg-white py-2 px-3 rounded-xl">
+                  {review.review}
+                </span>
+              </div>
             </div>
           </div>
+        ))}
 
-        </div>
-            
-          )
-        }
-       
+        <Modal id={"my_modal_" + _id}>
+          <div className="flex gap-3 items-center">
+            <img
+              className="w-10 h-10 rounded-full border-2 border-green-400"
+              src={photo_url}
+              alt=""
+            />
+            <h3 className="font-bold text-lg">
+              Please Provide Your Valuable Review!
+            </h3>
+          </div>
 
-
-  <Modal id={"my_modal_"+_id}>
-    <div className="flex gap-3 items-center">
-    <img className="w-10 h-10 rounded-full border-2 border-green-400" src={photo_url} alt="" />
-      <h3 className="font-bold text-lg">Please Provide Your Valuable Review!</h3>
-    </div>
-      
-      <form  onSubmit={handleSubmit(onSubmit)}>
-          <textarea rows='2' className="border-2 border-gray-200 w-full h-10 mt-3 p-2 text-[15px]" placeholder="Review..." type="text"  {...register("review", { required: true })} />
-          <input className="bg-green-400 border-2 w-full border-red-400 cursor-pointer hover:border-black py-2 px-14 my-5 rounded-lg text-white font-bold" type="submit" value='Submit' />
-      </form>
-  </Modal>
-  
-
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <textarea
+              rows="2"
+              className="border-2 border-gray-200 w-full h-10 mt-3 p-2 text-[15px]"
+              placeholder="Review..."
+              type="text"
+              {...register("review", { required: true })}
+            />
+            <input
+              className="bg-green-400 border-2 w-full border-red-400 cursor-pointer hover:border-black py-2 px-14 my-5 rounded-lg text-white font-bold"
+              type="submit"
+              value="Submit"
+            />
+          </form>
+        </Modal>
       </div>
     </div>
   );
