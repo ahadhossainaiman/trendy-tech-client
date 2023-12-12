@@ -39,16 +39,11 @@ const ProductCart = ({ product }) => {
   const onSubmit = (data)=>{
     const review = {...data,email,name,photo_url,product_id:_id};
     createReviews(review);
-    if(res){
       toast.success(`Thankyou ${name} For You Valuable Review !`, {
         position: toast.POSITION.TOP_CENTER
       })
       reset()
-    }else{
-      toast.error({errorMsg}, {
-        position: toast.POSITION.TOP_CENTER
-      })
-    }
+    
     
   }
   const handleModalOpen = (id)=>{  
@@ -103,7 +98,7 @@ console.log(reviews);
             <AiFillLike /> <span> 10</span>
           </div>
           <div>
-            <p>10 review</p>
+            <p>{filterReview.length} review</p>
           </div>
         </div>
         <div className="grid grid-cols-3 border-y-2 p-2 items-center">
@@ -122,11 +117,13 @@ console.log(reviews);
         </div>
         {
          filterReview?.map((review)=><div key={review._id} className="">
-          <div className="">
+          <div className="my-3">
             <div className="flex gap-1 items-center">
             <img className="w-8 h-8 rounded-full border-2 border-blue-500" src={review.photo_url} alt="" />
             <p className="text-[15px] text-blue-500 font-bold">{review.name}</p>
+            <span className="text-[12px]">{review.creationTime}</span>
             </div>
+           
             <div className="ml-8 mt-3">
               <span className="bg-white py-2 px-3 rounded-xl">{review.review}</span>
             </div>
