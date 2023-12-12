@@ -5,6 +5,10 @@ import { MdOutlineReportProblem } from "react-icons/md";
 import Modal from "./Modal";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
+import { useCreateReviewsMutation, useGetProductQuery, useGetReviewsQuery } from "@/redux/api/baseApi";
+import { toast } from "react-toastify";
+import { useState } from "react";
 
 const ProductCart = ({ product }) => {
     
@@ -22,12 +26,48 @@ const ProductCart = ({ product }) => {
     product_owner,
     tags,
   } = product;
-  console.log(_id);
+  const [updateId,setUpdateId] = useState();
+  const router = useRouter();
+  const [createReviews,{data:res,errorMsg}] = useCreateReviewsMutation();
+  const {data:reviews,isLoading,error} = useGetReviewsQuery();
+
+  console.log(reviews);
+ 
   const {name,email,photo_url} = useSelector((state)=>state.userSlice);
+  
   const onSubmit = (data)=>{
-    console.log({...data,email,name,photo_url,product_id:_id});
-    reset()
+  
+    const review = {...data,email,name,photo_url,product_id:updateId};
+    createReviews(review);
+    console.log(res);
+    if(res){
+      toast.success(`Thankyou ${name} For You Valuable Review !`, {
+        position: toast.POSITION.TOP_CENTER
+      })
+      reset()
+    }else{
+      toast.error({errorMsg}, {
+        position: toast.POSITION.TOP_CENTER
+      })
+    }
+    
   }
+
+  const handleModalOpen = (id)=>{
+    setUpdateId(id)
+    console.log(id);
+    if(name){
+      document.getElementById("my_modal_3").showModal()
+    }else{
+      console.log('aiman');
+      router.push('/login')
+    }
+  }
+
+  const filterReview = reviews?.filter((review)=>{
+    return review.product_id == updateId;
+  })
+  console.log(filterReview);
   return (
     <div className="mx-10 my-10 ">
       <div className="bg-slate-100 p-5 rounded-lg">
@@ -75,21 +115,43 @@ const ProductCart = ({ product }) => {
             <AiFillLike />
             <p>Link</p>
           </div>
-          <div   onClick={() => document.getElementById("my_modal_3").showModal()} className="flex cursor-pointer justify-center items-center gap-2">
-            <FaRegComment /> <p>review</p>
+          
+          <div  onClick={()=>handleModalOpen(_id)} className="flex cursor-pointer justify-center items-center gap-2">
+            <FaRegComment /> <p>Review</p>
           </div>
           <div className="flex  justify-center items-center gap-2">
             <MdOutlineReportProblem />
-            <p>report</p>
+            <p>Report</p>
           </div>
         </div>
+        {
+         filterReview?.map((review)=><div key={review._id} className="">
+          <div className="">
+            <div className="flex gap-1 items-center">
+            <img className="w-8 h-8 rounded-full border-2 border-blue-500" src={review.photo_url} alt="" />
+            <p className="text-[15px] text-blue-500 font-bold">{review.name}</p>
+            </div>
+            <div className="ml-8 mt-3">
+              <span className="bg-white py-2 px-3 rounded-xl">{review.review}</span>
+            </div>
+          </div>
+
+        </div>
+            
+          )
+        }
        
+
+
         <Modal id='my_modal_3'>
-        
+          <div className="flex gap-3 items-center">
+          <img className="w-10 h-10 rounded-full border-2 border-green-400" src={photo_url} alt="" />
             <h3 className="font-bold text-lg">Please Provide Your Valuable Review!</h3>
+          </div>
+            
             <form  onSubmit={handleSubmit(onSubmit)}>
-                <textarea rows='2' className="border-2 border-gray-200 w-full h-10 mt-3 p-2 text-[20px]" placeholder="review..." type="text"  {...register("review", { required: true })} />
-                <input className="bg-green-500 py-2 px-14 my-5 rounded-lg text-white font-bold" type="submit" value='submit' />
+                <textarea rows='2' className="border-2 border-gray-200 w-full h-10 mt-3 p-2 text-[15px]" placeholder="Review..." type="text"  {...register("review", { required: true })} />
+                <input className="bg-green-400 border-2 w-full border-red-400 cursor-pointer hover:border-black py-2 px-14 my-5 rounded-lg text-white font-bold" type="submit" value='Submit' />
             </form>
         </Modal>
         

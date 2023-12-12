@@ -47,7 +47,7 @@ export default function HomePage() {
       <h1>aiman</h1>
       
     </div>
-    <div className='col-span-3'>
+    <div className='col-span-3 h-[100vh] overflow-y-auto'>
       {
         products?.map((product)=><ProductCart product={product} key={product._id} />)
       }

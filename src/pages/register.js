@@ -19,7 +19,7 @@ const registerPage = () => {
 const dispatch = useDispatch();
 const {error,isError,isLoading,email,name} = useSelector((state)=>state.userSlice);
 console.log(error,isError,isLoading,email,name);
-      const [createUsers,{data,errormsg}] = useCreateUserMutation()
+      const [createUsers,{data,errorMsg}] = useCreateUserMutation()
 
       const onSubmit = ({name,email,password,photoURL}) => {
         dispatch(createUser({
