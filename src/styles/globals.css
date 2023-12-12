@@ -3,3 +3,58 @@
 @tailwind utilities;
 
 
+.ReactTags__tags {
+    position: relative;
+  }
+  
+  /* Styles for the input */
+  .ReactTags__tagInput {
+    width: 100%;
+    border: 2px solid gray;
+    border-radius: 2px;
+    display: inline-block;
+  }
+  .ReactTags__tagInput :focus{
+    outline: none;
+  }
+  .ReactTags__tagInput input.ReactTags__tagInputField,
+  .ReactTags__tagInput input.ReactTags__tagInputField:focus {
+    height: 35px;
+    margin: 0;
+    font-size: 15px;
+    width: 100%;
+    border: 1px solid #eee;
+  }
+  
+  /* Styles for selected tags */
+  .ReactTags__selected span.ReactTags__tag {
+    border: 1px solid #ddd;
+    background: #7c7b7b;
+    color: rgb(255, 255, 255);
+    font-size: 18px;
+    display: inline-block;
+    padding: 5px;
+    margin: 0 10px;
+    border-radius: 5px;
+  }
+  .ReactTags__selected a.ReactTags__remove {
+    color: #aaa;
+    margin-left: 5px;
+    cursor: pointer;
+  }
+  
+  /* Styles for suggestions */
+
+  
+
+
+  
+  .ReactTags__remove {
+    border: none;
+    padding: 5px;
+    font-size: large;
+    cursor: pointer;
+    background: none;
+    color: rgb(255, 255, 255);
+  }
+  

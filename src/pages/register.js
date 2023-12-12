@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+import { useCreateUserMutation } from '@/redux/api/baseApi';
 import { createUser } from '@/redux/features/user/userSlice';
 import Link from 'next/link';
 import React from 'react';
@@ -18,11 +19,17 @@ const registerPage = () => {
 const dispatch = useDispatch();
 const {error,isError,isLoading,email,name} = useSelector((state)=>state.userSlice);
 console.log(error,isError,isLoading,email,name);
+      const [createUsers,{data,errorMsg}] = useCreateUserMutation()
 
       const onSubmit = ({name,email,password,photoURL}) => {
         dispatch(createUser({
             name,email,password,photoURL
         }))
+
+        createUsers({ name,email,photoURL})
+        // console.log(data);
+
+
         reset()
       }
     //   console.log(errors);

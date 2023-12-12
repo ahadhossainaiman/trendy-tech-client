@@ -7,12 +7,15 @@ import { onAuthStateChanged } from 'firebase/auth'
 import auth from '@/firebase/firebase.config'
 import { useDispatch } from 'react-redux'
 import { setUser } from '@/redux/features/user/userSlice'
+import { useGetProductQuery } from '@/redux/api/baseApi'
+import ProductCart from '@/components/Ui/ProductCart'
 
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function HomePage() {
   const dispatch = useDispatch();
+  const {data:products,error,isLoading} = useGetProductQuery()
     useEffect(()=>{
       onAuthStateChanged(auth,(user)=>{
         console.log(user);
@@ -25,6 +28,7 @@ export default function HomePage() {
         }
       })
     },[])
+    console.log(products);
   return (
     <div >
     <Head>
@@ -37,8 +41,19 @@ export default function HomePage() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-    <h1>Hello</h1>
-   
+    
+   <section className='grid grid-cols-7'>
+    <div className='bg-green-300 h-[100vh]  col-span-2'>
+      <h1>aiman</h1>
+      
+    </div>
+    <div className='col-span-3 h-[100vh] overflow-y-auto'>
+      {
+        products?.map((product)=><ProductCart product={product} key={product._id} />)
+      }
+    </div>
+    <div className='bg-green-300 h-[100vh]  col-span-2'></div>
+   </section>
     </div>
   )
 }
