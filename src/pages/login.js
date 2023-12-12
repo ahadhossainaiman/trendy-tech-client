@@ -32,6 +32,9 @@ const {error,isError,isLoading,email,name} = useSelector((state)=>state.userSlic
         <div>
         {/* <Toaster position="top-right" /> */}
         <div className="hero min-h-screen bg-base-300">
+          <div>
+            dfhsdafhksafkasfhfkjahsf
+          </div>
           <div className="hero-content flex-col lg:flex-row-reverse">
             <div className="text-center lg:text-left">
               {/* <Lottie animationData={login} loop={true} className="" /> */}
