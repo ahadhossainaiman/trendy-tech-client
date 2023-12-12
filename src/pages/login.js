@@ -31,7 +31,7 @@ const {error,isError,isLoading,email,name} = useSelector((state)=>state.userSlic
     return (
         <div>
         {/* <Toaster position="top-right" /> */}
-        <div className="hero min-h-screen bg-base-300">
+        <div className="hero min-h-screen bg-base-200">
           <div className="hero-content flex-col lg:flex-row-reverse">
             <div className="text-center lg:text-left">
               {/* <Lottie animationData={login} loop={true} className="" /> */}
