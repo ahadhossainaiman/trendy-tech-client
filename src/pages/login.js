@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
+import React from "react";
 
 
 const login = () => {
@@ -29,22 +30,19 @@ const {error,isError,isLoading,email,name} = useSelector((state)=>state.userSlic
         reset()
     }
     return (
-        <div>
+        <div data-theme="light">
         {/* <Toaster position="top-right" /> */}
-        <div className="hero min-h-screen bg-base-300">
-          <div>
-            dfhsdafhksafkasfhfkjaghjgjghhsf
-          </div>
-          <div className="hero-content flex-col lg:flex-row-reverse">
-            <div className="text-center lg:text-left">
-              {/* <Lottie animationData={login} loop={true} className="" /> */}
-            </div>
-            <div className="">
+        <div className="hero min-h-screen bg-base-200 bg-[url('https://i.ibb.co/XjjpbpT/nasa-Q1p7bh3-SHj8-unsplash.jpg')]">
+
+
+
+            <div className="min-w-[30%]">
               <form
-                className="card-body bg-yellow-100  shadow-2xl p-6 md:mt-16 rounded-2xl border border-black"
+                  style={{ backdropFilter:'saturate(180%) blur(5px)'}}
+                  className="card-body shadow-2xl p-6 md:mt-16 rounded-2xl border border-black min-w-[30%]"
                 onSubmit={handleSubmit(onSubmit)}
               >
-                <h4 className="font-bold mb-2">Please SignUp</h4>
+                  <h1 className=" text-3xl flex justify-center my-3 text-white">Login Your Account</h1>
                 
                 <div className="form-control">
                   <input
@@ -54,7 +52,7 @@ const {error,isError,isLoading,email,name} = useSelector((state)=>state.userSlic
                     className="input input-bordered"
                   />
                   {errors.email && (
-                    <span className="text-red-500">Email is required</span>
+                    <span className="text-white">Email is required</span>
                   )}
                 </div>
                 <div className="form-control">
@@ -69,13 +67,13 @@ const {error,isError,isLoading,email,name} = useSelector((state)=>state.userSlic
                     className="input input-bordered"
                   />
                   {errors.password?.type === "required" && (
-                    <p className="text-red-500">password is required</p>
+                    <p className="text-white">password is required</p>
                   )}
                   {errors.password?.type === "minLength" && (
-                    <p className="text-red-500">password must be six character</p>
+                    <p className="text-white">password must be six character</p>
                   )}
                   {errors.password?.type === "pattern" && (
-                    <p className="text-red-500">
+                    <p className="text-white">
                       please provide uppercase and special character
                     </p>
                   )}
@@ -89,18 +87,19 @@ const {error,isError,isLoading,email,name} = useSelector((state)=>state.userSlic
                     className="btn bg-orange-600 text-white hover:bg-orange-400"
                   />
                 </div>
+                  <p>
+                      <small className="text-white ml-6 text-sm">
+                          Already have no account? please{" "}
+                          <Link href="/register" className="font-bold">
+                              Register
+                          </Link>
+                      </small>
+                  </p>
               </form>
-              <p>
-                <small className="text-orange-600 ml-6 text-sm">
-                  Already have no account? please{" "}
-                  <Link href="/register" className="font-bold">
-                    Register
-                  </Link>
-                </small>
-              </p>
+
               {/* <SocialLogIn></SocialLogIn> */}
             </div>
-          </div>
+
         </div>
       </div>
     );

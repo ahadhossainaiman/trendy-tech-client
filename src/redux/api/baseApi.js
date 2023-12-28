@@ -5,14 +5,20 @@ const baseApi = createApi({
     baseQuery:fetchBaseQuery({
         baseUrl:'http://localhost:5000'
     }),
-    tagTypes:['post'],
+    tagTypes:['post','likes'],
     endpoints:(builder)=>({
         getProduct:builder.query({
             query:()=>({url:`/products`})
         })
         ,
         getReviews:builder.query({
-            query:()=>({url:`/reviews`})
+            query:()=>({url:`/reviews`}),
+            providesTags:['post']
+        }),
+        getLikes:builder.query({
+            query:()=>({url:`/likes`}),
+            providesTags:['likes']
+
         }),
         createUser:builder.mutation({
             query:({name,email,photoURL})=>({
@@ -26,13 +32,23 @@ const baseApi = createApi({
                 url:`/reviews`,
                 method:'POST',
                 body:{email,name,photo_url,product_id,review}
-            })
+            }),
+            invalidatesTags:['post']
         }),
         createLikes:builder.mutation({
-            query:({product_id,photo_url,email, owner_img, product_name,product_owner})=>({
+         query:({product_id,photo_url,email, owner_img, product_name,product_owner,isLike})=>({
                 url:`/likes`,
                 method:'POST',
-                body:{product_id,photo_url,email, owner_img, product_name,product_owner}
+                body:{product_id,photo_url,email, owner_img, product_name,product_owner,isLike}
+            }),
+            invalidatesTags:['likes']
+            
+        }),
+        createStatus:builder.mutation({
+            query:({product_id,email})=>({
+                url:`/likestatus`,
+                method:'POST',
+                body:{product_id,email,status:true}
             })
         }),
         createDisLike:builder.mutation({
@@ -40,13 +56,23 @@ const baseApi = createApi({
                 url:`/dislikes`,
                 method:'DELETE',
                 body:{email,product_id}
-            })
+            }),
+            invalidatesTags:['likes']
+
         })
 
     })
     
 })
 
-export const {useCreateUserMutation,useGetProductQuery,useCreateReviewsMutation,useGetReviewsQuery,useCreateLikesMutation,useCreateDisLikeMutation} = baseApi;
+export const {useCreateUserMutation,
+    useGetProductQuery,
+    useCreateReviewsMutation,
+    useGetReviewsQuery,
+    useCreateLikesMutation,
+    useCreateDisLikeMutation,
+    useCreateStatusMutation,
+    useGetLikesQuery
+            } = baseApi;
 
 export default baseApi;

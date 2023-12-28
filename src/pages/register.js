@@ -34,31 +34,31 @@ console.log(error,isError,isLoading,email,name);
       }
     //   console.log(errors);
     return (
-        <div>
+        <div data-theme="light" >
         {/* <Toaster position="top-right" /> */}
-        <div className="hero min-h-screen bg-base-200">
-          <div className="hero-content flex-col lg:flex-row-reverse">
-            <div className="text-center lg:text-left">
-              {/* <Lottie animationData={login} loop={true} className="" /> */}
-            </div>
-            <div className="">
+        <header className="hero min-h-screen bg-base-200 bg-[url('https://i.ibb.co/XjjpbpT/nasa-Q1p7bh3-SHj8-unsplash.jpg')]">
+
+            <div className="min-w-[50%]">
+
               <form
-                className="card-body bg-yellow-100  shadow-2xl p-6 md:mt-16 rounded-2xl border border-black"
+                  style={{ backdropFilter:'saturate(180%) blur(5px)'}}
+                className="card-body shadow-2xl p-6 md:mt-16 rounded-2xl border border-black min-w-[70%]"
                 onSubmit={handleSubmit(onSubmit)}
               >
-                <h4 className="font-bold mb-2">Please SignUp</h4>
-                <div className="form-control">
+                  <h1 className=" text-5xl flex justify-center my-2 text-white">Create a new account</h1>
+                <div className='flex gap-2 flex-1'>
+                <div className="form-control w-[50%]" >
                   <input
                     type="text"
                     placeholder="name"
                     {...register("name", { required: true })}
-                    className="input input-bordered"
+                    className="input input-bordered w-full"
                   />
                   {errors.name && (
-                    <span className="text-red-500">name is required</span>
+                    <span className="text-white">name is required</span>
                   )}
                 </div>
-                <div className="form-control">
+                <div className="form-control w-[50%]">
                   <input
                     type="email"
                     placeholder="email"
@@ -66,10 +66,12 @@ console.log(error,isError,isLoading,email,name);
                     className="input input-bordered"
                   />
                   {errors.email && (
-                    <span className="text-red-500">Email is required</span>
+                    <span className="text-white">Email is required</span>
                   )}
                 </div>
-                <div className="form-control">
+                </div>
+                  <div className='flex gap-2'>
+                <div className="form-control w-[50%]">
                   <input
                     type="password"
                     placeholder="password"
@@ -81,18 +83,18 @@ console.log(error,isError,isLoading,email,name);
                     className="input input-bordered"
                   />
                   {errors.password?.type === "required" && (
-                    <p className="text-red-500">password is required</p>
+                    <p className="text-white">password is required</p>
                   )}
                   {errors.password?.type === "minLength" && (
-                    <p className="text-red-500">password must be six character</p>
+                    <p className="text-white">password must be six character</p>
                   )}
                   {errors.password?.type === "pattern" && (
-                    <p className="text-red-500">
+                    <p className="text-white">
                       please provide uppercase and special character
                     </p>
                   )}
                 </div>
-                <div className="form-control">
+                <div className="form-control w-[50%]">
                   <input
                     type="password"
                     placeholder="Confirm Password"
@@ -100,11 +102,12 @@ console.log(error,isError,isLoading,email,name);
                     className="input input-bordered"
                   />
                   {errors.confirm && (
-                    <span className="text-red-500">
+                    <span className="text-white">
                       Please Re-Write your password
                     </span>
                   )}
                 </div>
+                  </div>
                 <div className="form-control">
                   <input
                     type="text"
@@ -113,29 +116,30 @@ console.log(error,isError,isLoading,email,name);
                     className="input input-bordered"
                   />
                   {errors.photoURL && (
-                    <span className="text-red-500">Photo URL is required</span>
+                    <span className="text-white">Photo URL is required</span>
                   )}
                 </div>
                 <div className="form-control mt-6">
                   <input
                     type="submit"
-                    value="SignUp"
-                    className="btn bg-orange-600 text-white hover:bg-orange-400"
+                    value="SIGNUP"
+                    className="btn w-[70%] mx-auto bg-blue-500 text-white hover:bg-green-400"
                   />
                 </div>
+                  <p>
+                      <small className="text-white ml-6 text-sm">
+                          Already have an account? please{" "}
+                          <Link href="/login" className="font-bold">
+                              Login
+                          </Link>
+                      </small>
+                  </p>
               </form>
-              <p>
-                <small className="text-orange-600 ml-6 text-sm">
-                  Already have an account? please{" "}
-                  <Link href="/login" className="font-bold">
-                    Login
-                  </Link>
-                </small>
-              </p>
+
               {/* <SocialLogIn></SocialLogIn> */}
             </div>
-          </div>
-        </div>
+          </header>
+
       </div>
     );
 };

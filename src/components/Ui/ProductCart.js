@@ -10,6 +10,8 @@ import {
   useCreateDisLikeMutation,
   useCreateLikesMutation,
   useCreateReviewsMutation,
+  useCreateStatusMutation,
+  useGetLikesQuery,
   useGetProductQuery,
   useGetReviewsQuery,
 } from "@/redux/api/baseApi";
@@ -38,6 +40,8 @@ const ProductCart = ({ product }) => {
   const { data: reviews, isLoading, error } = useGetReviewsQuery();
   const [createLikes, { data: likeRes }] = useCreateLikesMutation();
   const [createDisLike,{data:disLikeRes}] = useCreateDisLikeMutation();
+  const [createLikeStatus,{data:likeStatus}]= useCreateStatusMutation();
+  const {data:likesCollection} = useGetLikesQuery();
 
   const { name, email, photo_url } = useSelector((state) => state.userSlice);
 
@@ -58,35 +62,48 @@ const ProductCart = ({ product }) => {
     }
   };
   const handleLike = (email) => {
-    setToggleLike(!toggleLike)
-    console.log({
-      product_id: _id,
-      photo_url,
-      email,
-      owner_img,
-      product_name,
-      product_owner,
-    });
-    createLikes({
-      product_id: _id,
-      photo_url,
-      email,
-      owner_img,
-      product_name,
-      product_owner,
-    });
-    console.log(likeRes);
+    if(name){
+      setToggleLike(!toggleLike)
+      createLikes({
+        product_id: _id,
+        photo_url,
+        email,
+        owner_img,
+        product_name,
+        product_owner,
+        isLike:!toggleLike
+      });
+      createLikeStatus({  product_id: _id, email})
+      console.log(likeRes);
+    }else{
+      router.push("/login")
+    }
+
   };
   const handleDisLike = () =>{
-    setToggleLike(!toggleLike)
-    createDisLike({email,product_id:_id})
+    if(name){
+      setToggleLike(!toggleLike)
+      createDisLike({email,product_id:_id})
+    }else{
+      router.push("/login");
+    }
+
 
   }
-  console.log(reviews);
   const filterReview = reviews?.filter((review) => {
     return review.product_id == _id;
   });
-
+  // console.log(likesCollection);
+  const filterLikes =  likesCollection?.filter((like,index)=>{
+    return like.product_id === _id;
+  })
+  const postIsLikes = likesCollection?.some((like)=>{
+    return like.email === email && like.product_id=== _id
+      
+  })
+  // setToggleLike(postIsLikes);
+  console.log(_id,postIsLikes);
+  // console.log(filterLikes);
   return (
     <div className="mx-10 my-10 ">
       <div className="bg-slate-100 p-5 rounded-lg">
@@ -109,7 +126,7 @@ const ProductCart = ({ product }) => {
           </h1>
           <img
             className="w-[100%] h-96 rounded-lg my-5"
-            src={owner_img}
+            src={product_img}
             alt=""
           />
           <Link href="/" className="font-bold">
@@ -123,17 +140,17 @@ const ProductCart = ({ product }) => {
         </div>
         <div className="flex justify-between my-5">
           <div className="flex items-center">
-            <AiFillLike /> <span> 10</span>
+            <AiFillLike /> <span> {filterLikes?.length}</span>
           </div>
           <div>
             <p>{filterReview?.length} review</p>
           </div>
         </div>
         <div className="grid grid-cols-3 border-y-2 p-2 items-center">
-          {toggleLike ? (
+          { toggleLike || postIsLikes  ? (
             <div
             onClick={handleDisLike}
-              className="flex justify-center items-center gap-2"
+              className="flex justify-center items-center gap-2 cursor-pointer"
             >
               <AiFillLike />
 
@@ -143,7 +160,7 @@ const ProductCart = ({ product }) => {
             <div
             
               onClick={() => handleLike(email)}
-              className="flex justify-center items-center gap-2"
+              className="flex justify-center items-center gap-2 cursor-pointer"
             >
               <AiOutlineLike />
 

@@ -29,21 +29,23 @@ const DashboardLayouts = ({children}) => {
           <label htmlFor="my-drawer-2" className="btn btn-primary drawer-button lg:hidden">Open drawer</label>
         
         </div> 
-        <div className="drawer-side">
+        <div className="drawer-side main">
           <label htmlFor="my-drawer-2" aria-label="close sidebar" className="drawer-overlay">
           
           </label> 
-          <div className='flex gap-5 items-center py-5 px-3 bg-slate-200'>
+          <div className=''>
+          <Link href='/' className='flex gap-5 items-center py-5 px-3 bg-slate-200'>
             <img className='w-20 border-yellow-500 border-4 rounded-full' src={photo_url} alt="" />
             <p className='text-xl'>{name}</p>
+            </Link>
             </div>
           <ul className="menu p-4 w-80 min-h-[87vh] bg-base-200 text-base-content">
             {/* Sidebar content here */}
             
            
-            <li><a>My Profile</a></li>
+            <li><Link href='/dashboard/profile'>My Profile</Link></li>
             <li><Link href='/addproduct'>Add Product</Link></li>
-            <li><a>My Product</a></li>
+            <li><Link href='/dashboard/productlist'>My Product</Link></li>
             
           </ul>
          

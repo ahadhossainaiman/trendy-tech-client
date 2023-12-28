@@ -43,16 +43,15 @@ export default function HomePage() {
       </Head>
     
    <section className='grid grid-cols-7'>
-    <div className='bg-green-300 h-[100vh]  col-span-2'>
-      <h1>aiman</h1>
+    <div className='h-[100vh]  col-span-2'>
       
     </div>
-    <div className='col-span-3 h-[100vh] overflow-y-auto'>
+    <div className='col-span-3 h-[100vh] overflow-y-auto main'>
       {
         products?.map((product)=><ProductCart product={product} key={product._id} />)
       }
     </div>
-    <div className='bg-green-300 h-[100vh]  col-span-2'></div>
+    <div className='h-[100vh]  col-span-2'></div>
    </section>
     </div>
   )
