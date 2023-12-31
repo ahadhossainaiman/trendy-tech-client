@@ -8,7 +8,8 @@ const baseApi = createApi({
     tagTypes:['post','likes'],
     endpoints:(builder)=>({
         getProduct:builder.query({
-            query:()=>({url:`/products`})
+            query:()=>({url:`/products`}),
+            providesTags:['post']
         })
         ,
         getReviews:builder.query({
@@ -59,8 +60,15 @@ const baseApi = createApi({
             }),
             invalidatesTags:['likes']
 
+        }),
+        deleteProduct:builder.mutation({
+            query:(id)=>({
+                url:`/deleteProduct`,
+                method:'DELETE',
+                body:{id}
+            }),
+            invalidatesTags:['post']   
         })
-
     })
     
 })
@@ -72,7 +80,9 @@ export const {useCreateUserMutation,
     useCreateLikesMutation,
     useCreateDisLikeMutation,
     useCreateStatusMutation,
-    useGetLikesQuery
+    useGetLikesQuery,
+    useDeleteProductMutation,
+
             } = baseApi;
 
 export default baseApi;
