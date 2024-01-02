@@ -9,8 +9,7 @@ const DashboardLayouts = ({children}) => {
   const {name,email,photo_url} = useSelector((state)=>state.userSlice);
   const dispatch = useDispatch();
     useEffect(()=>{
-      onAuthStateChanged(auth,(user)=>{
-        console.log(user);
+      onAuthStateChanged(auth,(user)=>{;
         if(user){
           dispatch(setUser({
             name:user.displayName,

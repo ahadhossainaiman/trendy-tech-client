@@ -16,18 +16,12 @@ const ProductList = () => {
   const { data: products } = useGetProductQuery();
   const { data: likes } = useGetLikesQuery();
   const { data: reviews } = useGetReviewsQuery();
-  console.log(likes);
-  console.log(products);
-  console.log(res);
   const userProducts = products?.filter(
     (product) => product?.owner_email == email
   );
   const handleDeleteProduct = (id) => {
-    console.log(id);
     setId(id)
   };
-console.log(userProducts);
-
   return (
     <div>
       <div className="overflow-x-auto">

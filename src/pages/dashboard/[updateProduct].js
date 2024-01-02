@@ -6,32 +6,27 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useParams } from "next/navigation";
+import { useGetSingleProductQuery } from "@/redux/api/baseApi";
+import { useRouter } from "next/router";
 
 const updateProduct = () => {
-    // const {updateProductId} = useParams();
-    // console.log(updateProductId);
+    const router = useRouter();
+    const {data:singleProduct,isLoading} = useGetSingleProductQuery(router.query.updateProduct);
+
     const { register, handleSubmit,reset } = useForm();
-    const [tags, setTags] = useState([]);
+    const [tags, setTags] = useState(singleProduct?.tags);
     const {name,email,photo_url} = useSelector((state)=>state.userSlice);
-  
-   
 
     const handleDelete = (i) => {
       setTags(tags.filter((tag, index) => index !== i));
     };
   
     const handleAddition = (tag) => {
-      setTags([...tags, tag]);
+      setTags((pre)=>[...pre,tag]);
     };
   
-    const handleTagClick = (index) => {
-      console.log("The tag at index " + index + " was clicked");
-    };
-  
-    console.log(tags);
   
     const onSubmit = (data) => {
-      
       const result =  { ...data, tags }
       fetch('http://localhost:5000/products',{
         method:'POST',
@@ -40,7 +35,6 @@ const updateProduct = () => {
         },
         body:JSON.stringify(result)
       }).then(res=>res.json()).then((data)=>{
-  
         if(data){
           console.log(data);
           console.log('aiman');
@@ -50,9 +44,12 @@ const updateProduct = () => {
           reset();
       }
     })
-    
       console.log({ ...data, tags });
     };
+
+    if(isLoading){
+      return <h1>Loading.......</h1>
+    }
     return (
         <>
         <h1 className="text-3xl flex justify-center my-10">Product Add</h1>
@@ -63,6 +60,7 @@ const updateProduct = () => {
             <input
               className="border-gray-500 border-2 h-10 p-1"
               placeholder="Enter Your Product Name"
+              defaultValue={singleProduct?.product_name}
               {...register("product_name", { required: true })}
             />
           </label>
@@ -71,6 +69,7 @@ const updateProduct = () => {
             <input
               className="border-gray-500 border-2 h-10 p-1"
               placeholder="Enter Image Url"
+              defaultValue={singleProduct?.product_img}
               {...register("product_img", { required: true })}
             />
           </label>
@@ -106,6 +105,7 @@ const updateProduct = () => {
               rows="5"
               className="border-gray-500 border-2"
               placeholder="Enter Owner Email" 
+              defaultValue={singleProduct?.product_description}
               {...register("product_description", { required: true })}
             />
           </label>
@@ -124,6 +124,7 @@ const updateProduct = () => {
             <input
               className="border-gray-500 border-2 h-10 p-1"
               placeholder="Enter Owner Email"
+              defaultValue={singleProduct?.external_link}
               {...register("external_link", { required: true })}
             />
           </label>

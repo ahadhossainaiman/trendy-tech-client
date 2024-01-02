@@ -5,11 +5,13 @@ import { WithContext as ReactTags } from "react-tag-input";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { useAddProductMutation } from "@/redux/api/baseApi";
 
 const addProduct = () => {
-  const { register, handleSubmit,reset } = useForm();
+  const { register, handleSubmit, reset } = useForm();
   const [tags, setTags] = useState([]);
-  const {name,email,photo_url} = useSelector((state)=>state.userSlice)
+  const { name, email, photo_url } = useSelector((state) => state.userSlice);
+  const [addProduct, res] = useAddProductMutation();
 
   const handleDelete = (i) => {
     setTags(tags.filter((tag, index) => index !== i));
@@ -26,27 +28,28 @@ const addProduct = () => {
   console.log(tags);
 
   const onSubmit = (data) => {
-    
-    const result =  { ...data, tags }
-    fetch('http://localhost:5000/products',{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json'
-      },
-      body:JSON.stringify(result)
-    }).then(res=>res.json()).then((data)=>{
-
-      if(data){
-        console.log(data);
-        console.log('aiman');
-        toast.success("Product Added Successfully !", {
-          position: toast.POSITION.TOP_CENTER
-        })
-        reset();
+    const result = { ...data, tags };
+    //   fetch('http://localhost:5000/products',{
+    //     method:'POST',
+    //     headers:{
+    //       'Content-Type':'application/json'
+    //     },
+    //     body:JSON.stringify(result)
+    //   }).then(res=>res.json()).then((data)=>{
+    //     if(data){
+    //       toast.success("Product Added Successfully !", {
+    //         position: toast.POSITION.TOP_CENTER
+    //       })
+    //       reset();
+    //   }
+    // })
+    addProduct(result);
+    if (res.isUninitialized) {
+      toast.success("Product Added Successfully !", {
+        position: toast.POSITION.TOP_CENTER,
+      });
     }
-  })
-  
-    console.log({ ...data, tags });
+    reset();
   };
 
   return (
@@ -74,7 +77,9 @@ const addProduct = () => {
             Product Owner:
             <input
               className="border-gray-500 border-2 h-10 p-1"
-              placeholder="Enter Owner Name" defaultValue={name} readOnly
+              placeholder="Enter Owner Name"
+              defaultValue={name}
+              readOnly
               {...register("product_owner", { required: true })}
             />
           </label>
@@ -83,7 +88,8 @@ const addProduct = () => {
             <input
               className="border-gray-500 border-2 h-10 p-1"
               placeholder="Enter Owner Email"
-              defaultValue={email} readOnly
+              defaultValue={email}
+              readOnly
               {...register("owner_email", { required: true })}
             />
           </label>
@@ -92,7 +98,8 @@ const addProduct = () => {
             <input
               className="border-gray-500 border-2 h-10 p-1"
               placeholder="Enter Owner Email"
-              defaultValue={photo_url} readOnly
+              defaultValue={photo_url}
+              readOnly
               {...register("owner_img", { required: true })}
             />
           </label>
@@ -101,7 +108,7 @@ const addProduct = () => {
             <textarea
               rows="5"
               className="border-gray-500 border-2"
-              placeholder="Enter Owner Email" 
+              placeholder="Enter Owner Email"
               {...register("product_description", { required: true })}
             />
           </label>

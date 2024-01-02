@@ -10,8 +10,19 @@ const baseApi = createApi({
         getProduct:builder.query({
             query:()=>({url:`/products`}),
             providesTags:['post']
-        })
-        ,
+        }),
+        addProduct:builder.mutation({
+            query:(result)=>({
+                url:'/products',
+              method:'POST',
+              body:result
+            })
+        }),
+        getSingleProduct:builder.query({
+            query:(id)=>({
+                url:`/dashboard/${id}`
+            })
+        }),
         getReviews:builder.query({
             query:()=>({url:`/reviews`}),
             providesTags:['post']
@@ -82,6 +93,8 @@ export const {useCreateUserMutation,
     useCreateStatusMutation,
     useGetLikesQuery,
     useDeleteProductMutation,
+    useAddProductMutation,
+    useGetSingleProductQuery
 
             } = baseApi;
 
